@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Google Fonts ──────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ── CSS Custom Properties ─────────────────────────── */
+:root {
+  --font-size-base: 16px;
+  --font-family-base: 'Inter', system-ui, sans-serif;
+  --transition-speed: 0.3s;
+}
+
+/* ── Base Reset ────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: var(--font-size-base);
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f8fafc;
+  color: #1e293b;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Accessibility: Larger Font ────────────────────── */
+.a11y-larger-font {
+  --font-size-base: 20px;
+}
+.a11y-larger-font body,
+.a11y-larger-font p,
+.a11y-larger-font li,
+.a11y-larger-font span {
+  font-size: 1.2rem !important;
+  line-height: 1.8 !important;
+}
+
+/* ── Accessibility: High Contrast ─────────────────── */
+.a11y-high-contrast {
+  filter: contrast(1.4);
+}
+.a11y-high-contrast body {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+.a11y-high-contrast a,
+.a11y-high-contrast button {
+  outline: 2px solid #fff !important;
+}
+
+/* ── Accessibility: Dyslexic Font ─────────────────── */
+.a11y-dyslexic-font {
+  --font-family-base: 'OpenDyslexic', Arial, sans-serif;
+}
+.a11y-dyslexic-font * {
+  font-family: 'OpenDyslexic', Arial, sans-serif !important;
+  letter-spacing: 0.05em;
+  word-spacing: 0.1em;
+  line-height: 1.8;
+}
+
+/* ── Accessibility: Reduced Motion ────────────────── */
+.a11y-reduced-motion *,
+.a11y-reduced-motion *::before,
+.a11y-reduced-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* ── Focus Ring (keyboard navigation) ─────────────── */
+:focus-visible {
+  outline: 3px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── Scrollbar Styling ─────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* ── Chat Bubble ─────────────────────────────────── */
+.chat-bubble-user {
+  @apply bg-civic-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 max-w-xs md:max-w-md lg:max-w-lg ml-auto;
+}
+.chat-bubble-bot {
+  @apply bg-white border border-gray-100 shadow-sm rounded-2xl rounded-tl-sm px-4 py-3 max-w-xs md:max-w-md lg:max-w-lg;
+}
+
+/* ── Gradient Hero ───────────────────────────────── */
+.hero-gradient {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 40%, #1d4ed8 70%, #2563eb 100%);
+}
+
+/* ── Glass Card ──────────────────────────────────── */
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ── Timeline connector line ─────────────────────── */
+.timeline-connector {
+  @apply absolute top-5 left-5 w-0.5 bg-gradient-to-b from-civic-blue-400 to-civic-blue-200;
+  height: calc(100% - 20px);
+  z-index: 0;
+}
+
+/* ── Typing indicator dots ───────────────────────── */
+.typing-dot {
+  @apply w-2 h-2 bg-gray-400 rounded-full;
+  animation: bounceDot 1.4s infinite ease-in-out both;
+}
+.typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+.typing-dot:nth-child(3) { animation-delay: 0s; }
+
+/* ── Badge shimmer effect ────────────────────────── */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.badge-shimmer {
+  background: linear-gradient(90deg, #f59e0b, #fbbf24, #f59e0b);
+  background-size: 200% auto;
+  animation: shimmer 2s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
