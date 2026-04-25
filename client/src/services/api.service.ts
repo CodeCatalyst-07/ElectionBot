@@ -6,7 +6,7 @@ import { ApiError } from '../types/index';
  * Uses the Vite proxy in development (/api → http://localhost:8080).
  */
 const apiClient: AxiosInstance = axios.create({
-  baseURL: '/api',
+  baseURL: 'https://election-assistant-server-154633889700.us-central1.run.app/api',
   timeout: 30000,
   headers: { 'Content-Type': 'application/json' },
 });

@@ -3,12 +3,12 @@ import { synthesizeSpeech, stopBrowserTTS } from '../services/tts.service';
 
 /**
  * Custom hook managing text-to-speech playback state.
- * Tracks which message is currently playing, handles audio lifecycle.
+ * All operations fail gracefully — a TTS error will never crash the app.
  *
  * @param language - Currently selected app language for voice selection
  * @returns Playing message ID, play handler, and stop handler
  */
-export function useTextToSpeech(language: string): {
+export function useTextToSpeech(language: string | null | undefined): {
   playingMessageId: string | null;
   playMessage: (messageId: string, text: string) => Promise<void>;
   stopPlayback: () => void;
@@ -17,30 +17,44 @@ export function useTextToSpeech(language: string): {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const stopPlayback = useCallback((): void => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.src = '';
-      audioRef.current = null;
+    try {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
+        audioRef.current = null;
+      }
+      stopBrowserTTS();
+    } catch {
+      // Ignore audio teardown errors
+    } finally {
+      setPlayingMessageId(null);
     }
-    stopBrowserTTS();
-    setPlayingMessageId(null);
   }, []);
 
   const playMessage = useCallback(
     async (messageId: string, text: string): Promise<void> => {
+      // Guard: bail out silently if inputs are invalid
+      if (!messageId || typeof messageId !== 'string') return;
+      if (!text || typeof text !== 'string' || text.trim().length === 0) return;
+
       // Stop any currently playing audio first
       stopPlayback();
-
       setPlayingMessageId(messageId);
 
       try {
-        const audioSrc = await synthesizeSpeech(text, language);
+        const audioSrc = await synthesizeSpeech(text, language ?? 'en');
 
-        // If audioSrc is null, browser TTS was used — just clear state when done
+        // synthesizeSpeech returns null when browser TTS is used
         if (!audioSrc) {
-          if ('speechSynthesis' in window) {
+          // Poll until browser TTS finishes speaking, then clear state
+          if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
             const checkInterval = setInterval(() => {
-              if (!window.speechSynthesis.speaking) {
+              try {
+                if (!window.speechSynthesis.speaking) {
+                  setPlayingMessageId(null);
+                  clearInterval(checkInterval);
+                }
+              } catch {
                 setPlayingMessageId(null);
                 clearInterval(checkInterval);
               }
@@ -51,7 +65,7 @@ export function useTextToSpeech(language: string): {
           return;
         }
 
-        // Play the MP3 returned from Google Cloud TTS
+        // Play the MP3 data URL returned from Google Cloud TTS
         const audio = new Audio(audioSrc);
         audioRef.current = audio;
 
@@ -66,7 +80,9 @@ export function useTextToSpeech(language: string): {
 
         await audio.play();
       } catch {
+        // Any unexpected error — reset state, don't crash
         setPlayingMessageId(null);
+        audioRef.current = null;
       }
     },
     [language, stopPlayback],
