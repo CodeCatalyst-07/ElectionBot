@@ -221,7 +221,7 @@ ElectionBot/
 │   │   │   └── calendar.service.ts  # Calendar event scheduling
 │   │   ├── pages/                   # Chat, Home, QuizPage, VoterGuidePage
 │   │   ├── types/                   # TypeScript interfaces
-│   │   ├── constants/               # Quiz questions, timelines, guide steps
+│   │   ├── constants/               # Centralized client-side constants for API URLs, storage keys, and default values
 │   │   └── utils/                   # dateUtils, quizUtils, sanitize
 │   └── src/__tests__/               # Jest unit tests
 │
@@ -237,6 +237,7 @@ ElectionBot/
 │   │   ├── middleware/              # helmet, cors, rateLimit, validation, errorHandler
 │   │   ├── types/                   # Server-side TypeScript interfaces
 │   │   └── utils/                   # winston logger, constants
+│   │   │   └── constants.ts         # Centralized server-side constants for ports, limits, error codes, and collection names
 │   └── src/__tests__/               # Jest unit tests (Gemini, Translate, TTS)
 │
 ├── functions/                       # Firebase Cloud Functions
@@ -275,6 +276,9 @@ ElectionBot/
 | `models/gemini-1.5-flash is not found for API version v1beta` | Model updated to `gemini-2.5-flash`; configurable via `GEMINI_MODEL` env variable without code changes |
 | `.js` import extensions crashing `ts-node-dev` | Stripped all `.js` extensions from relative imports — resolved CJS/ESM conflict |
 | Jest can't resolve `.js` imports in tests | Added `moduleNameMapper: { '^(\\.{1,2}/.*)\\.js$': '$1' }` to `jest.config.js` |
+| Hardcoded strings scattered across files | Extracted all hardcoded values into centralized constants files: `client/src/constants/index.ts` (5 new constants) and `server/src/utils/constants.ts` (11 new constants) |
+| Missing JSDoc documentation on key functions | Added JSDoc comments to 6 files including `translate.service.ts`, `useAccessibility.ts`, `validation.middleware.ts`, `tts.service.ts`, and `server/src/index.ts` — 73 lines of documentation added total |
+| Empty string being forwarded to `/translate` endpoint | Added empty and whitespace string guard in `translateText` that returns original text immediately without making a wasted API call |
 
 ---
 
