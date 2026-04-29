@@ -3,7 +3,7 @@
 > An intelligent, multilingual civic education platform for first-time and informed voters in **India** (primary) and the **USA** (secondary).
 
 [![Live App](https://img.shields.io/badge/Live%20App-election--assistant--494412.web.app-blue?style=flat-square&logo=firebase)](https://election-assistant-494412.web.app)
-[![Backend](https://img.shields.io/badge/Backend-Cloud%20Run-green?style=flat-square&logo=google-cloud)](https://election-assistant-server-154633889700.us-central1.run.app)
+[![Backend](https://img.shields.io/badge/Backend-Cloud%20Run-green?style=flat-square&logo=google-cloud)](https://your-backend-url.us-central1.run.app)
 [![GitHub](https://img.shields.io/badge/GitHub-ElectionBot-black?style=flat-square&logo=github)](https://github.com/CodeCatalyst-07/ElectionBot)
 [![Model](https://img.shields.io/badge/AI-Gemini%202.5%20Flash-orange?style=flat-square&logo=google)](https://ai.google.dev)
 
@@ -14,7 +14,7 @@
 | Service | URL |
 |---------|-----|
 | **Frontend (Firebase Hosting)** | https://election-assistant-494412.web.app |
-| **Backend API (Cloud Run)** | https://election-assistant-server-154633889700.us-central1.run.app |
+| **Backend API (Cloud Run)** | https://your-backend-url.us-central1.run.app |
 | **GitHub Repository** | https://github.com/CodeCatalyst-07/ElectionBot |
 
 ---
@@ -189,7 +189,7 @@ gcloud run deploy election-assistant-server \
   --set-env-vars GEMINI_API_KEY=<key>,GEMINI_MODEL=gemini-2.5-flash
 ```
 
-**Backend API:** https://election-assistant-server-154633889700.us-central1.run.app
+**Backend API:** https://your-backend-url.us-central1.run.app
 
 ---
 
