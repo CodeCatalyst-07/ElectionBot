@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { AccessibilitySettings } from '../types/index';
-
-const STORAGE_KEY = 'election-bot-accessibility';
+import { ACCESSIBILITY_STORAGE_KEY as STORAGE_KEY } from '../constants/index';
 
 const DEFAULT_SETTINGS: AccessibilitySettings = {
   largerFont: false,

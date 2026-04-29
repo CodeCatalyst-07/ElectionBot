@@ -1,12 +1,13 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import { ApiError } from '../types/index';
+import { BACKEND_API_URL } from '../constants/index';
 
 /**
  * Configured Axios instance for all backend API calls.
  * Uses the Vite proxy in development (/api → http://localhost:8080).
  */
 const apiClient: AxiosInstance = axios.create({
-  baseURL: 'https://election-assistant-server-154633889700.us-central1.run.app/api',
+  baseURL: BACKEND_API_URL,
   timeout: 30000,
   headers: { 'Content-Type': 'application/json' },
 });

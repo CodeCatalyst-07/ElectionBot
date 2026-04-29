@@ -1,4 +1,5 @@
 import { CountryContext } from '../types/index';
+import { CALENDAR_AUTH_PATH } from '../constants/index';
 
 /**
  * Initiates the Google Calendar OAuth2 flow by navigating the user
@@ -9,7 +10,7 @@ import { CountryContext } from '../types/index';
  * @param country - Which country's election events to add ('india' or 'us')
  */
 export function initiateCalendarAuth(country: CountryContext): void {
-  window.location.href = `/api/calendar/auth?country=${country}`;
+  window.location.href = `${CALENDAR_AUTH_PATH}${country}`;
 }
 
 /**

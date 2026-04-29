@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { Request, Response, NextFunction } from 'express';
-import { SUPPORTED_LANGUAGES, TTS_LANGUAGE_CODES } from '../utils/constants';
+import { SUPPORTED_LANGUAGES, TTS_LANGUAGE_CODES, ERROR_CODES } from '../utils/constants';
 
 /**
  * Sanitizes a raw string field by trimming whitespace, stripping HTML tags
@@ -61,7 +61,7 @@ function validateBody(schema: Joi.ObjectSchema) {
     if (error) {
       res.status(400).json({
         error: error.details.map((d) => d.message).join('; '),
-        code: 'VALIDATION_ERROR',
+        code: ERROR_CODES.VALIDATION_ERROR,
         statusCode: 400,
       });
       return;

@@ -1,7 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-
-const STORAGE_KEY = 'election-bot-language';
-const DEFAULT_LANGUAGE = 'en';
+import { LANGUAGE_STORAGE_KEY as STORAGE_KEY, DEFAULT_LANGUAGE } from '../constants/index';
 
 /**
  * Custom hook managing the selected UI language.

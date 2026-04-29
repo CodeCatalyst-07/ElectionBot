@@ -3,6 +3,7 @@ import { validateTTSRequest } from '../middleware/validation.middleware';
 import { synthesizeSpeech } from '../services/tts.service';
 import { TTSRequest, TTSResponse } from '../types/index';
 import logger from '../utils/logger';
+import { ERROR_CODES } from '../utils/constants';
 
 const router = Router();
 
@@ -30,7 +31,7 @@ router.post(
       if (error instanceof Error && error.message.includes('not configured')) {
         res.status(503).json({
           error: 'Google TTS not configured. Use browser Web Speech API.',
-          code: 'TTS_NOT_CONFIGURED',
+          code: ERROR_CODES.TTS_NOT_CONFIGURED,
           statusCode: 503,
         });
         return;

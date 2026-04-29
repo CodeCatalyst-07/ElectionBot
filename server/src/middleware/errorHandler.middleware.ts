@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import logger from '../utils/logger';
+import { ERROR_CODES } from '../utils/constants';
 
 /**
  * Global error handler middleware.
@@ -26,7 +27,7 @@ export function errorHandler(
     error: isProduction
       ? 'An internal server error occurred. Please try again.'
       : err.message,
-    code: 'INTERNAL_SERVER_ERROR',
+    code: ERROR_CODES.INTERNAL_SERVER_ERROR,
     statusCode: 500,
   });
 }
@@ -38,7 +39,7 @@ export function errorHandler(
 export function notFoundHandler(req: Request, res: Response): void {
   res.status(404).json({
     error: `Route ${req.method} ${req.path} not found.`,
-    code: 'NOT_FOUND',
+    code: ERROR_CODES.NOT_FOUND,
     statusCode: 404,
   });
 }

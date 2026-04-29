@@ -1,6 +1,7 @@
 import admin from 'firebase-admin';
 import { ChatMessage, FirestoreSession } from '../types/index';
 import logger from '../utils/logger';
+import { FIRESTORE_SESSIONS_COLLECTION } from '../utils/constants';
 
 /** In-memory fallback store when Firebase is not configured or credentials are invalid. */
 const inMemoryStore = new Map<string, FirestoreSession>();
@@ -83,7 +84,7 @@ export async function createSession(sessionId: string): Promise<FirestoreSession
   if (isFirestoreAvailable()) {
     try {
       const db = admin.firestore();
-      await db.collection('sessions').doc(sessionId).set(session);
+      await db.collection(FIRESTORE_SESSIONS_COLLECTION).doc(sessionId).set(session);
       logger.debug('Session created in Firestore', { sessionId });
     } catch (err) {
       logger.warn('Firestore write failed — falling back to in-memory', { sessionId });
@@ -108,7 +109,7 @@ export async function saveMessage(sessionId: string, message: ChatMessage): Prom
   if (isFirestoreAvailable()) {
     try {
       const db = admin.firestore();
-      const ref = db.collection('sessions').doc(sessionId);
+      const ref = db.collection(FIRESTORE_SESSIONS_COLLECTION).doc(sessionId);
       const doc = await ref.get();
 
       if (!doc.exists) {
@@ -153,7 +154,7 @@ export async function getHistory(sessionId: string): Promise<ChatMessage[]> {
   if (isFirestoreAvailable()) {
     try {
       const db = admin.firestore();
-      const doc = await db.collection('sessions').doc(sessionId).get();
+      const doc = await db.collection(FIRESTORE_SESSIONS_COLLECTION).doc(sessionId).get();
       if (!doc.exists) return [];
       const data = doc.data() as FirestoreSession;
       return data.messages ?? [];

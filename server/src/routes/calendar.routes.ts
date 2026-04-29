@@ -6,6 +6,7 @@ import {
 } from '../services/calendar.service';
 import { CountryContext } from '../types/index';
 import logger from '../utils/logger';
+import { DEFAULT_CLIENT_ORIGIN, ERROR_CODES } from '../utils/constants';
 
 const router = Router();
 
@@ -22,7 +23,7 @@ router.get('/auth', (req: Request, res: Response): void => {
   if (!authUrl) {
     res.status(503).json({
       error: 'Google Calendar integration is not configured yet. Coming soon!',
-      code: 'CALENDAR_NOT_CONFIGURED',
+      code: ERROR_CODES.CALENDAR_NOT_CONFIGURED,
       statusCode: 503,
     });
     return;
@@ -39,7 +40,7 @@ router.get('/auth', (req: Request, res: Response): void => {
 router.get('/callback', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { code, state } = req.query;
   const country = (state as CountryContext) ?? 'india';
-  const clientOrigin = process.env.CLIENT_ORIGIN ?? 'http://localhost:5173';
+  const clientOrigin = process.env.CLIENT_ORIGIN ?? DEFAULT_CLIENT_ORIGIN;
 
   if (!code || typeof code !== 'string') {
     res.redirect(`${clientOrigin}?calendar=error&message=missing_code`);

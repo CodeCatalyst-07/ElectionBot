@@ -1,5 +1,6 @@
 import cors from 'cors';
 import { RequestHandler } from 'express';
+import { DEFAULT_CLIENT_ORIGIN, ALT_DEV_ORIGIN } from '../utils/constants';
 
 /**
  * CORS middleware allowing only the configured frontend origin.
@@ -8,9 +9,9 @@ import { RequestHandler } from 'express';
 export const corsMiddleware: RequestHandler = cors({
   origin: (origin, callback) => {
     const allowedOrigins = [
-      process.env.CLIENT_ORIGIN ?? 'http://localhost:5173',
-      'http://localhost:5173',
-      'http://localhost:3000',
+      process.env.CLIENT_ORIGIN ?? DEFAULT_CLIENT_ORIGIN,
+      DEFAULT_CLIENT_ORIGIN,
+      ALT_DEV_ORIGIN,
     ];
 
     // Allow requests with no origin (mobile apps, curl, Postman)

@@ -1,9 +1,7 @@
 import { google } from 'googleapis';
 import { CalendarEvent, CountryContext } from '../types/index';
-import { INDIA_ELECTION_EVENTS, US_ELECTION_EVENTS } from '../utils/constants';
+import { INDIA_ELECTION_EVENTS, US_ELECTION_EVENTS, CALENDAR_OAUTH_SCOPES, DEFAULT_CALENDAR_REDIRECT_URI } from '../utils/constants';
 import logger from '../utils/logger';
-
-const SCOPES = ['https://www.googleapis.com/auth/calendar.events'];
 
 /**
  * Creates a configured OAuth2 client for Google Calendar access.
@@ -12,7 +10,7 @@ const SCOPES = ['https://www.googleapis.com/auth/calendar.events'];
 function createOAuth2Client(): InstanceType<typeof google.auth.OAuth2> | null {
   const clientId = process.env.GOOGLE_CALENDAR_CLIENT_ID;
   const clientSecret = process.env.GOOGLE_CALENDAR_CLIENT_SECRET;
-  const redirectUri = process.env.GOOGLE_CALENDAR_REDIRECT_URI ?? 'http://localhost:8080/api/calendar/callback';
+  const redirectUri = process.env.GOOGLE_CALENDAR_REDIRECT_URI ?? DEFAULT_CALENDAR_REDIRECT_URI;
 
   if (!clientId || !clientSecret) {
     logger.warn('Google Calendar OAuth2 credentials not configured');
@@ -35,7 +33,7 @@ export function getCalendarAuthUrl(country: CountryContext): string | null {
 
   const authUrl = oauth2Client.generateAuthUrl({
     access_type: 'offline',
-    scope: SCOPES,
+    scope: CALENDAR_OAUTH_SCOPES,
     state: country,
     prompt: 'consent',
   });

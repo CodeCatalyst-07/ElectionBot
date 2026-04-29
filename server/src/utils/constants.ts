@@ -39,6 +39,96 @@ Always cite official sources when relevant.`;
  */
 export const MAX_HISTORY_CONTEXT = 10;
 
+// ─── Server Configuration ─────────────────────────────────────────────────────
+
+/**
+ * Default HTTP port for the Election Assistant API server.
+ * Overridden by the PORT environment variable on Google Cloud Run.
+ */
+export const DEFAULT_PORT = '8080';
+
+/**
+ * Maximum allowed request body size.
+ * Protects the server from oversized payloads on all JSON/URL-encoded routes.
+ */
+export const BODY_SIZE_LIMIT = '10kb';
+
+// ─── CORS Origins ─────────────────────────────────────────────────────────────
+
+/**
+ * Default allowed frontend origin used when CLIENT_ORIGIN env variable is unset.
+ * Matches the Vite development server default port.
+ */
+export const DEFAULT_CLIENT_ORIGIN = 'http://localhost:5173';
+
+/**
+ * Additional local development origin allowed by the CORS policy.
+ * Supports alternative dev server setups (e.g. Create React App on port 3000).
+ */
+export const ALT_DEV_ORIGIN = 'http://localhost:3000';
+
+// ─── Rate Limiting ────────────────────────────────────────────────────────────
+
+/**
+ * Rolling time window for rate limiting (1 minute in milliseconds).
+ * Applied to both chat and general API rate limiters.
+ */
+export const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+
+/**
+ * Maximum requests per minute allowed from a single IP on the chat endpoint.
+ * Lower than general limit to protect Gemini API quota.
+ */
+export const CHAT_RATE_LIMIT_MAX = 20;
+
+/**
+ * Maximum requests per minute allowed from a single IP on all other endpoints.
+ */
+export const GENERAL_RATE_LIMIT_MAX = 100;
+
+// ─── Firestore ────────────────────────────────────────────────────────────────
+
+/**
+ * Name of the Firestore collection used to persist ElectionBot chat sessions.
+ * Each document is keyed by the UUID session ID generated on the client.
+ */
+export const FIRESTORE_SESSIONS_COLLECTION = 'sessions';
+
+// ─── Error Codes ─────────────────────────────────────────────────────────────
+
+/**
+ * Standardised error code strings returned in API JSON error responses.
+ * Using constants avoids typos and makes error handling easier to grep/test.
+ */
+export const ERROR_CODES = {
+  /** Chat request, translate request, or TTS request failed Joi schema validation. */
+  VALIDATION_ERROR: 'VALIDATION_ERROR',
+  /** Rate limit exceeded on the chat or general endpoint. */
+  RATE_LIMIT_EXCEEDED: 'RATE_LIMIT_EXCEEDED',
+  /** Unhandled exception that reached the global error handler. */
+  INTERNAL_SERVER_ERROR: 'INTERNAL_SERVER_ERROR',
+  /** Request path does not match any registered route. */
+  NOT_FOUND: 'NOT_FOUND',
+  /** Google Cloud TTS is not configured; client should use Web Speech API. */
+  TTS_NOT_CONFIGURED: 'TTS_NOT_CONFIGURED',
+  /** Google Calendar OAuth2 credentials are not set in the environment. */
+  CALENDAR_NOT_CONFIGURED: 'CALENDAR_NOT_CONFIGURED',
+} as const;
+
+// ─── Google Calendar ──────────────────────────────────────────────────────────
+
+/**
+ * OAuth2 scopes required for creating events in the user's Google Calendar.
+ * Restricted to calendar.events so we never read or delete existing events.
+ */
+export const CALENDAR_OAUTH_SCOPES = ['https://www.googleapis.com/auth/calendar.events'];
+
+/**
+ * Default OAuth2 redirect URI used when GOOGLE_CALENDAR_REDIRECT_URI is unset.
+ * Points to the local development callback endpoint.
+ */
+export const DEFAULT_CALENDAR_REDIRECT_URI = 'http://localhost:8080/api/calendar/callback';
+
 /**
  * Supported language codes for Google Translate and TTS.
  */

@@ -1,4 +1,10 @@
 import rateLimit from 'express-rate-limit';
+import {
+  RATE_LIMIT_WINDOW_MS,
+  CHAT_RATE_LIMIT_MAX,
+  GENERAL_RATE_LIMIT_MAX,
+  ERROR_CODES,
+} from '../utils/constants';
 
 /**
  * Rate limiter for the chat endpoint.
@@ -6,13 +12,13 @@ import rateLimit from 'express-rate-limit';
  * Returns a structured JSON error (not HTML) when the limit is exceeded.
  */
 export const chatRateLimiter = rateLimit({
-  windowMs: 60 * 1000,
-  max: 20,
+  windowMs: RATE_LIMIT_WINDOW_MS,
+  max: CHAT_RATE_LIMIT_MAX,
   standardHeaders: true,
   legacyHeaders: false,
   message: {
     error: 'Too many requests. Please wait a moment before sending another message.',
-    code: 'RATE_LIMIT_EXCEEDED',
+    code: ERROR_CODES.RATE_LIMIT_EXCEEDED,
     statusCode: 429,
   },
   handler: (_req, res, _next, options) => {
@@ -25,13 +31,13 @@ export const chatRateLimiter = rateLimit({
  * Applied to all other routes as a broad protection layer.
  */
 export const generalRateLimiter = rateLimit({
-  windowMs: 60 * 1000,
-  max: 100,
+  windowMs: RATE_LIMIT_WINDOW_MS,
+  max: GENERAL_RATE_LIMIT_MAX,
   standardHeaders: true,
   legacyHeaders: false,
   message: {
     error: 'Too many requests. Please try again shortly.',
-    code: 'RATE_LIMIT_EXCEEDED',
+    code: ERROR_CODES.RATE_LIMIT_EXCEEDED,
     statusCode: 429,
   },
   handler: (_req, res, _next, options) => {

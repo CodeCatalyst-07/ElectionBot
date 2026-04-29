@@ -9,6 +9,36 @@ import {
 /** Backend API base URL (proxied through Vite in dev) */
 export const API_BASE_URL = '/api';
 
+/**
+ * Production backend API base URL (Google Cloud Run).
+ * Used by the Axios client in api.service.ts.
+ */
+export const BACKEND_API_URL = 'https://election-assistant-server-154633889700.us-central1.run.app/api';
+
+/**
+ * localStorage key for persisting the user's accessibility settings
+ * (high contrast, dyslexic font, larger text, reduced motion, screen reader).
+ */
+export const ACCESSIBILITY_STORAGE_KEY = 'election-bot-accessibility';
+
+/**
+ * localStorage key for persisting the user's selected UI language
+ * across browser sessions.
+ */
+export const LANGUAGE_STORAGE_KEY = 'election-bot-language';
+
+/**
+ * Default language code shown when the user has not yet selected a language.
+ * English is used as the fallback for all election content.
+ */
+export const DEFAULT_LANGUAGE = 'en';
+
+/**
+ * Base path for initiating Google Calendar OAuth2 for election event creation.
+ * Appended with the country context (e.g. 'india' or 'us').
+ */
+export const CALENDAR_AUTH_PATH = '/api/calendar/auth?country=';
+
 /** Suggested questions shown to new chatbot users */
 export const SUGGESTED_QUESTIONS: string[] = [
   'How do I register to vote in India?',
