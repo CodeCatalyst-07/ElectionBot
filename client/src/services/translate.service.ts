@@ -27,6 +27,9 @@ function buildCacheKey(text: string, targetLanguage: string): string {
 export async function translateText(text: string, targetLanguage: string): Promise<string> {
   if (targetLanguage === 'en') return text;
 
+  // Guard: nothing to translate
+  if (!text || text.trim().length === 0) return text;
+
   const cacheKey = buildCacheKey(text, targetLanguage);
   const cached = translationCache.get(cacheKey);
   if (cached !== undefined) return cached;
