@@ -20,6 +20,13 @@ const CSS_CLASS_MAP: Record<keyof AccessibilitySettings, string> = {
   screenReaderMode: 'a11y-screen-reader',
 };
 
+/**
+ * Loads persisted accessibility settings from localStorage.
+ * Falls back to DEFAULT_SETTINGS if nothing is stored or if
+ * localStorage is unavailable (e.g. private browsing mode).
+ *
+ * @returns Merged AccessibilitySettings with stored overrides applied
+ */
 function loadSettings(): AccessibilitySettings {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -32,6 +39,14 @@ function loadSettings(): AccessibilitySettings {
   return DEFAULT_SETTINGS;
 }
 
+/**
+ * Applies the current accessibility settings to the root `<html>` element
+ * by adding or removing CSS class names from `CSS_CLASS_MAP`.
+ * This drives features like high contrast, dyslexic font, and reduced motion
+ * purely through CSS without React re-renders.
+ *
+ * @param settings - The current AccessibilitySettings to reflect in the DOM
+ */
 function applySettingsToDOM(settings: AccessibilitySettings): void {
   const html = document.documentElement;
   (Object.keys(settings) as Array<keyof AccessibilitySettings>).forEach((key) => {
@@ -66,6 +81,12 @@ export function useAccessibility(): {
     }
   }, [settings]);
 
+  /**
+   * Toggles a single accessibility setting on or off.
+   * The change is immediately reflected in the DOM and persisted to localStorage.
+   *
+   * @param key - The AccessibilitySettings property to toggle (e.g. 'highContrast', 'dyslexicFont')
+   */
   const toggleSetting = useCallback((key: keyof AccessibilitySettings): void => {
     setSettings((prev) => ({ ...prev, [key]: !prev[key] }));
   }, []);

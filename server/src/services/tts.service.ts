@@ -7,6 +7,13 @@ import logger from '../utils/logger';
  */
 let ttsClient: TextToSpeechClient | null = null;
 
+/**
+ * Returns a singleton Google Cloud Text-to-Speech client.
+ * Initializes the client on first call using the `GOOGLE_TTS_API_KEY`
+ * environment variable. Subsequent calls reuse the same instance.
+ *
+ * @returns A configured TextToSpeechClient ready for synthesis requests
+ */
 function getTTSClient(): TextToSpeechClient {
   if (!ttsClient) {
     ttsClient = new TextToSpeechClient({

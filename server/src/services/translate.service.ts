@@ -8,6 +8,13 @@ import logger from '../utils/logger';
  */
 let translateClient: Translate | null = null;
 
+/**
+ * Returns a singleton Google Cloud Translate v2 client.
+ * Initializes on first call using the `GOOGLE_TRANSLATE_API_KEY` environment variable.
+ * Subsequent calls reuse the same instance to avoid repeated authentication overhead.
+ *
+ * @returns A configured Translate client ready to translate election-related content
+ */
 function getTranslateClient(): Translate {
   if (!translateClient) {
     translateClient = new Translate({ key: process.env.GOOGLE_TRANSLATE_API_KEY });

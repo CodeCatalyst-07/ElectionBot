@@ -2,7 +2,14 @@ import Joi from 'joi';
 import { Request, Response, NextFunction } from 'express';
 import { SUPPORTED_LANGUAGES, TTS_LANGUAGE_CODES } from '../utils/constants';
 
-/** Sanitizes a string: trims whitespace, strips HTML tags, enforces max length. */
+/**
+ * Sanitizes a raw string field by trimming whitespace, stripping HTML tags
+ * to prevent XSS, and capping the length to a safe maximum.
+ *
+ * @param value - The raw string value received in a request body
+ * @param maxLength - Maximum allowed character count (default: 2000)
+ * @returns A trimmed, HTML-stripped, length-capped string
+ */
 function sanitizeString(value: string, maxLength = 2000): string {
   return value
     .trim()
@@ -37,9 +44,15 @@ const ttsSchema = Joi.object({
 });
 
 /**
- * Validates request body against a Joi schema.
- * Sanitizes string fields to prevent injection attacks.
- * Returns 400 with a descriptive error if validation fails.
+ * Creates an Express middleware that validates the request body against
+ * the provided Joi schema, then sanitizes all string fields.
+ *
+ * Used to guard the `/api/chat`, `/api/translate`, and `/api/tts` endpoints
+ * against malformed requests and injection payloads before they reach
+ * the Gemini, Google Translate, or TTS service layers.
+ *
+ * @param schema - A Joi ObjectSchema describing the expected request shape
+ * @returns Express middleware that validates, sanitizes, and passes or rejects the request
  */
 function validateBody(schema: Joi.ObjectSchema) {
   return (req: Request, res: Response, next: NextFunction): void => {

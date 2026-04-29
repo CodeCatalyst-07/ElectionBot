@@ -4,6 +4,14 @@ import { TranslateResponse } from '../types/index';
 /** In-memory translation cache to avoid repeated identical API calls. */
 const translationCache = new Map<string, string>();
 
+/**
+ * Builds a lightweight cache key for a translation request.
+ * Uses only the first 100 characters of the text to keep keys short.
+ *
+ * @param text - The text being translated (e.g. an election FAQ answer)
+ * @param targetLanguage - The BCP-47 target language code (e.g. 'hi', 'ta')
+ * @returns A string in the format `"<lang>:<text_prefix>"` used as a Map key
+ */
 function buildCacheKey(text: string, targetLanguage: string): string {
   return `${targetLanguage}:${text.slice(0, 100)}`;
 }

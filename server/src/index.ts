@@ -11,7 +11,16 @@ import calendarRoutes from './routes/calendar.routes';
 import healthRoutes from './routes/health.routes';
 import logger from './utils/logger';
 
+/**
+ * Express application instance for the Election Assistant API.
+ * All middleware, routes, and error handlers are registered on this object.
+ */
 const app = express();
+
+/**
+ * HTTP port the server listens on.
+ * Defaults to 8080 to match Google Cloud Run's expected port.
+ */
 const PORT = parseInt(process.env.PORT ?? '8080', 10);
 
 // ─── Security Middleware ────────────────────────────────────────────────────
@@ -38,6 +47,10 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 // ─── Start Server ────────────────────────────────────────────────────────────
+/**
+ * Starts the HTTP server and logs a startup message.
+ * In production, Cloud Run injects the PORT environment variable automatically.
+ */
 app.listen(PORT, () => {
   logger.info(`Election Assistant API running on port ${PORT}`, {
     environment: process.env.NODE_ENV ?? 'development',
