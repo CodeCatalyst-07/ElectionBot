@@ -44,7 +44,7 @@
 | Translate | Google Cloud Translate (optional) |
 | Auth/Calendar | Google OAuth2 Calendar (optional) |
 | Hosting | Firebase Hosting (frontend) + Google Cloud Run (backend) |
-| Testing | Jest (34 tests) + Cypress E2E |
+| Testing | Jest (44 tests) + Cypress E2E + GitHub Actions CI |
 
 ---
 
@@ -159,9 +159,9 @@ npm test
 
 ### All tests — expected output
 ```
-Test Suites: 3 passed (server) + 2 passed (client)
-Tests:       34 passed, 0 failed
-Coverage:    97.7% statements (server), 93.2% statements (client)
+Test Suites: 9 passed (client)
+Tests:       44 passed, 0 failed
+Coverage:    95.52% statements (client), 97.7% statements (server)
 ```
 
 ---
@@ -190,6 +190,13 @@ gcloud run deploy election-assistant-server \
 ```
 
 **Backend API:** https://your-backend-url.us-central1.run.app
+
+### CI/CD Pipeline
+Every push to `main` automatically triggers the GitHub Actions CI workflow (`.github/workflows/ci.yml`), which:
+- Installs dependencies for root, server, and client
+- Runs all 44 Jest tests across both server and client
+
+Status is visible in the **GitHub Actions** tab of the repository.
 
 ---
 
@@ -279,6 +286,8 @@ ElectionBot/
 | Hardcoded strings scattered across files | Extracted all hardcoded values into centralized constants files: `client/src/constants/index.ts` (5 new constants) and `server/src/utils/constants.ts` (11 new constants) |
 | Missing JSDoc documentation on key functions | Added JSDoc comments to 6 files including `translate.service.ts`, `useAccessibility.ts`, `validation.middleware.ts`, `tts.service.ts`, and `server/src/index.ts` — 73 lines of documentation added total |
 | Empty string being forwarded to `/translate` endpoint | Added empty and whitespace string guard in `translateText` that returns original text immediately without making a wasted API call |
+| Jest validation warning: unknown option `setupFilesAfterFramework` | Renamed to `setupFilesAfterEnv` (correct Jest 29 option name) and added `esModuleInterop: true` to ts-jest globals configuration |
+| No CI pipeline for automated testing | Added GitHub Actions workflow at `.github/workflows/ci.yml` that automatically runs all 44 tests on every push to `main` across Node.js 18 on `ubuntu-latest` |
 
 ---
 
