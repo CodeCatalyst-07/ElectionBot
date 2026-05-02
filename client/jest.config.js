@@ -4,7 +4,12 @@ module.exports = {
   testEnvironment: 'jsdom',
   roots: ['<rootDir>/src/__tests__'],
   testMatch: ['**/*.test.ts', '**/*.test.tsx'],
-  setupFilesAfterFramework: ['@testing-library/jest-dom'],
+  setupFilesAfterEnv: ['@testing-library/jest-dom'],
+  globals: {
+    'ts-jest': {
+      tsconfig: { esModuleInterop: true },
+    },
+  },
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '\\.(css|less|scss)$': '<rootDir>/src/__tests__/__mocks__/styleMock.js',
